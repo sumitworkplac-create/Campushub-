@@ -1,14 +1,20 @@
 const admin = require("firebase-admin");
-const serviceAccount = require("./serviceAccountKey.json"); // Apni file ka sahi path dein
 
+// Using Environment Variables to avoid JSON file signature issues
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    // Replacing escaped newlines for private key
+    privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined
+  }),
   databaseURL: "https://campu-6ae68-default-rtdb.firebaseio.com"
 });
 
 const db = admin.database();
 
-// Listen for new notifications in the queue
+console.log("Notification background service is running...");
+
 db.ref("notifications_queue").on("child_added", async (snapshot) => {
   const notifData = snapshot.val();
   const notifId = snapshot.key;
@@ -22,8 +28,6 @@ db.ref("notifications_queue").on("child_added", async (snapshot) => {
   };
 
   try {
-    // Send to a topic named 'all' (You need to subscribe users to this topic first)
-    // OR send to all FCM Tokens stored in the DB
     const usersSnap = await db.ref("users").once("value");
     const tokens = [];
     usersSnap.forEach(user => {
@@ -36,7 +40,6 @@ db.ref("notifications_queue").on("child_added", async (snapshot) => {
         notification: payload.notification
       });
       console.log("Push notifications sent successfully!");
-      // Remove from queue after sending
       await db.ref(`notifications_queue/${notifId}`).remove();
     }
   } catch (error) {
