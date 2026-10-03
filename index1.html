@@ -8,23 +8,23 @@
     <!-- Font Awesome (For Icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <!-- Normal Custom CSS (Premium Theme) -->
+    <!-- Normal Custom CSS (Premium iOS Theme) -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
         :root {
             /* Mewar University Theme Colors based on Logo */
             --primary: #7e2b7b; /* Deep Purple */
             --primary-hover: #5d1c5b; 
             --secondary: #e0224f; /* Crimson/Magenta */
-            --bg-color: #f4f5f7; 
+            --bg-color: #f2f2f7; /* iOS background color */
             --card-bg: #ffffff;
             --text-main: #111827; 
             --text-muted: #6b7280; 
-            --border-color: #e5e7eb; 
-            --danger: #dc2626; 
-            --success: #16a34a; 
-            --ios-gray: #f1f2f6;
+            --border-color: #e5e5ea; 
+            --danger: #ff3b30; 
+            --success: #34c759; 
+            --ios-gray: #f2f2f7;
         }
 
         * {
@@ -41,6 +41,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            -webkit-font-smoothing: antialiased;
         }
 
         .hidden { display: none !important; }
@@ -55,12 +56,13 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
 
-        h1, h2, h3 { color: var(--text-main); font-weight: 700; }
+        h1, h2, h3 { color: var(--text-main); font-weight: 800; }
         .text-center { text-align: center; }
         .text-sm { font-size: 0.875rem; }
         .text-xs { font-size: 0.75rem; }
         .text-muted { color: var(--text-muted); }
         .font-bold { font-weight: 700; }
+        .font-extrabold { font-weight: 800; }
         .mt-2 { margin-top: 0.5rem; }
         .mt-4 { margin-top: 1rem; }
         .mt-5 { margin-top: 1.25rem; }
@@ -73,7 +75,7 @@
         .w-full { width: 100%; }
         .flex-1 { flex: 1; min-width: 0; }
 
-        .app-container { flex: 1; overflow-y: auto; padding: 1.5rem; }
+        .app-container { flex: 1; overflow-y: auto; padding: 1.5rem 1rem; }
         .container { max-width: 56rem; margin: 0 auto; }
         .container-lg { max-width: 64rem; margin: 0 auto; }
         .container-sm { max-width: 42rem; margin: 0 auto; }
@@ -88,63 +90,79 @@
         .gap-4 { gap: 1rem; }
 
         /* Navbar */
-        .navbar { background: white; color: var(--text-main); box-shadow: 0 4px 15px rgba(0,0,0,0.05); z-index: 30; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
-        .nav-inner { max-width: 80rem; margin: 0 auto; padding: 0 1rem; display: flex; height: 4.5rem; align-items: center; justify-content: space-between; }
-        .nav-logo { display: flex; align-items: center; gap: 0.75rem; background: none; border: none; cursor: pointer; text-align: left; }
+        .navbar { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); color: var(--text-main); box-shadow: 0 1px 0 rgba(0,0,0,0.05); z-index: 30; flex-shrink: 0; }
+        .nav-inner { max-width: 80rem; margin: 0 auto; padding: 0 1rem; display: flex; height: 4rem; align-items: center; justify-content: space-between; }
+        .nav-logo { display: flex; align-items: center; gap: 0.5rem; background: none; border: none; cursor: pointer; text-align: left; text-decoration: none; }
         
-        .nav-logo-img { height: 3rem; width: auto; object-fit: contain; } /* Mewar Logo Styling */
+        .nav-logo-img { height: 2.75rem; width: auto; object-fit: contain; } 
+        .nav-logo-text { font-weight: 800; font-size: 1.15rem; color: var(--primary); letter-spacing: -0.02em; }
         
-        .nav-links { display: flex; align-items: center; gap: 0.5rem; }
-        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.5rem 0.75rem; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.35rem; }
+        /* HIDE NAME ON MOBILE */
+        @media (max-width: 640px) {
+            .nav-logo-text { display: none !important; }
+        }
+        
+        .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+        .nav-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.4rem 0.6rem; border-radius: 0.75rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.35rem; }
         .nav-btn:hover { background: var(--ios-gray); color: var(--primary); }
         .nav-btn.active { background: #f3e8f4; color: var(--primary); }
         .nav-btn-logout:hover { background: #fee2e2; color: var(--danger); }
         
         /* Admin Toggles */
-        .admin-toggles { background: var(--ios-gray); padding: 0.25rem; border-radius: 0.75rem; display: flex; align-items: center; margin-left: 0.25rem; }
-        .btn-role { background: transparent; border: none; color: var(--text-muted); padding: 0.35rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .admin-toggles { background: var(--ios-gray); padding: 0.2rem; border-radius: 0.75rem; display: flex; align-items: center; margin-left: 0.25rem; }
+        .btn-role { background: transparent; border: none; color: var(--text-muted); padding: 0.35rem 0.6rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-role:hover { color: var(--primary); }
-        .btn-role.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-role.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         
-        .admin-banner { background: #fffbeb; border-bottom: 1px solid #fde68a; color: #92400e; padding: 0.5rem 1rem; text-align: center; font-size: 0.875rem; font-weight: 600; }
+        .admin-banner { background: #fffbeb; border-bottom: 1px solid #fde68a; color: #92400e; padding: 0.4rem 1rem; text-align: center; font-size: 0.8rem; font-weight: 700; }
 
         /* Modals & Overlays */
         .auth-overlay { position: fixed; inset: 0; z-index: 100; background: var(--bg-color); display: flex; align-items: center; justify-content: center; padding: 1rem; }
         .auth-box { background: white; border-radius: 1.5rem; box-shadow: 0 20px 40px -5px rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 2.5rem; width: 100%; max-width: 28rem; text-align: center; }
-        .auth-icon-wrap img { width: 5rem; height: auto; margin: 0 auto 1.5rem; }
+        .auth-icon-wrap img { width: 5.5rem; height: auto; margin: 0 auto 1.5rem; }
 
-        .modal-overlay { position: fixed; inset: 0; z-index: 150; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-overlay { position: fixed; inset: 0; z-index: 150; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 1rem; }
         .modal-content { background: white; border-radius: 1.5rem; padding: 2rem; width: 100%; max-width: 28rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
         
-        .pdf-modal-bg { background: rgba(0,0,0,0.8); }
+        .pdf-modal-bg { background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         .pdf-box { background: white; width: 100%; max-width: 72rem; height: 92vh; border-radius: 1rem; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-        .pdf-header { height: 4rem; padding: 0 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: #fafafa; z-index: 10;}
+        .pdf-header { height: 4rem; padding: 0 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.9); z-index: 10;}
         .pdf-iframe { flex: 1; width: 100%; border: none; background: #e5e5ea; }
 
-        .loader-box { background: white; border-radius: 1.25rem; padding: 1.75rem 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); text-align: center; min-width: 14rem; }
-        .spinner { width: 3rem; height: 3rem; border: 4px solid #f3e8f4; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+        .loader-box { background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 1.25rem; padding: 1.75rem 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); text-align: center; min-width: 14rem; }
+        .spinner { width: 2.5rem; height: 2.5rem; border: 4px solid #f3e8f4; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Cards & Content */
-        .card { background: white; border-radius: 1.25rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 1.5rem; }
-        .card-header-icon { width: 3rem; height: 3rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; box-shadow: 0 4px 10px rgba(224, 34, 79, 0.2); }
-        .card-body { padding: 1.5rem; }
-        .card-footer { background: #fafafa; border-top: 1px solid var(--border-color); padding: 1.25rem 1.5rem; }
+        /* iOS Glassmorphism Card for "Start Discussion" */
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.8); 
+            border-radius: 1.5rem; 
+            box-shadow: 0 8px 30px rgba(0,0,0,0.04); 
+            overflow: hidden; 
+            margin-bottom: 2rem; 
+        }
         
-        .empty-state { border: 2px dashed #d1d5db; border-radius: 1.25rem; padding: 3rem; text-align: center; background: white; }
+        .card { background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02); overflow: hidden; margin-bottom: 1.5rem; }
+        .card-header-icon { width: 3rem; height: 3rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 0.85rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; box-shadow: 0 4px 10px rgba(224, 34, 79, 0.2); }
+        .card-body { padding: 1.5rem; }
+        .card-footer { background: #fafafc; border-top: 1px solid var(--border-color); padding: 1.25rem 1.5rem; }
+        
+        .empty-state { border: 2px dashed #d1d5db; border-radius: 1.5rem; padding: 3rem 1rem; text-align: center; background: white; }
         .empty-icon { width: 4rem; height: 4rem; background: var(--ios-gray); color: #9ca3af; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin: 0 auto 1rem; }
 
         /* Forms */
         .form-group { margin-bottom: 1.25rem; }
         .form-label { display: block; font-size: 0.875rem; font-weight: 700; color: #374151; margin-bottom: 0.4rem; }
-        .form-control { width: 100%; border: 1.5px solid #d1d5db; border-radius: 0.75rem; padding: 0.75rem 1rem; font-size: 1rem; font-family: inherit; outline: none; transition: 0.2s; background: white; }
+        .form-control { width: 100%; border: 1.5px solid #d1d5db; border-radius: 0.85rem; padding: 0.85rem 1rem; font-size: 1rem; font-weight: 500; font-family: inherit; outline: none; transition: 0.2s; background: white; color: var(--text-main); }
         .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(126, 43, 123, 0.1); }
         textarea.form-control { resize: none; min-height: 100px; }
-
-        input[type="file"].form-control { padding: 0.6rem; cursor: pointer; }
+        input[type="file"].form-control { padding: 0.7rem; cursor: pointer; }
 
         /* Buttons */
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: inherit; font-weight: 700; border-radius: 0.75rem; padding: 0.85rem 1.5rem; border: none; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: inherit; font-weight: 700; border-radius: 0.85rem; padding: 0.85rem 1.5rem; border: none; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; box-shadow: 0 4px 12px rgba(126, 43, 123, 0.25); }
         .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(126, 43, 123, 0.35); }
@@ -155,23 +173,27 @@
         
         .btn-icon { background: transparent; border: none; color: #9ca3af; cursor: pointer; padding: 0.5rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .btn-icon:hover { color: var(--danger); background: #fee2e2; }
-        .btn-sm { padding: 0.6rem 1rem; font-size: 0.875rem; }
+        .btn-sm { padding: 0.5rem 0.85rem; font-size: 0.85rem; }
 
         /* 🍎 iOS UI FOR ANSWER INPUT */
-        .ios-input-group { display: flex; align-items: flex-end; background: #ffffff; border: 1px solid var(--border-color); border-radius: 1.5rem; padding: 0.35rem 0.35rem 0.35rem 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: 0.2s; }
-        .ios-input-group:focus-within { border-color: var(--primary); box-shadow: 0 2px 12px rgba(126, 43, 123, 0.1); }
-        .ios-input { flex: 1; background: transparent; border: none; outline: none; font-size: 0.95rem; padding: 0.5rem 0; font-family: inherit; resize: none; min-height: 40px; max-height: 120px; color: var(--text-main); }
-        .ios-input::placeholder { color: #9ca3af; }
-        .ios-send-btn { background: var(--primary); color: white; border: none; border-radius: 50%; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.15s; font-size: 1.1rem; flex-shrink: 0; }
+        .ios-input-group { display: flex; align-items: flex-end; background: #ffffff; border: 1.5px solid var(--border-color); border-radius: 1.5rem; padding: 0.35rem 0.35rem 0.35rem 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: 0.2s; }
+        .ios-input-group:focus-within { border-color: var(--primary); box-shadow: 0 4px 12px rgba(126, 43, 123, 0.1); }
+        .ios-input { flex: 1; background: transparent; border: none; outline: none; font-size: 0.95rem; font-weight: 500; padding: 0.5rem 0; font-family: inherit; resize: none; min-height: 40px; max-height: 120px; color: var(--text-main); }
+        .ios-input::placeholder { color: #9ca3af; font-weight: 500; }
+        .ios-send-btn { background: var(--primary); color: white; border: none; border-radius: 50%; width: 2.4rem; height: 2.4rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.15s; font-size: 1.1rem; flex-shrink: 0; }
         .ios-send-btn:hover { background: var(--secondary); transform: scale(1.05); }
         .ios-send-btn:active { transform: scale(0.95); }
 
         /* Avatars */
-        .avatar { width: 2.75rem; height: 2.75rem; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .avatar-placeholder { width: 2.75rem; height: 2.75rem; border-radius: 50%; background: #f3e8f4; color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .user-name { font-weight: 800; color: var(--text-main); font-size: 0.95rem; }
-        .user-meta { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+        .avatar { width: 2.8rem; height: 2.8rem; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+        .avatar-placeholder { width: 2.8rem; height: 2.8rem; border-radius: 50%; background: #f3e8f4; color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+        .user-name { font-weight: 800; color: var(--text-main); font-size: 0.95rem; letter-spacing: -0.01em; }
+        .user-meta { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
         
+        /* Highlighted Question/Answer Styles */
+        .highlight-question { font-weight: 900; font-size: 1.3rem; margin-bottom: 0.6rem; color: #111827; letter-spacing: -0.02em; line-height: 1.3; }
+        .highlight-answer { font-weight: 600; color: #1f2937; white-space: pre-wrap; font-size: 0.95rem; line-height: 1.6; }
+
         /* Grids */
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
         @media(min-width: 640px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
@@ -186,15 +208,25 @@
 
         /* Misc */
         .badge { padding: 0.35rem 0.85rem; border-radius: 999px; font-size: 0.75rem; font-weight: 800; background: #f3e8f4; color: var(--primary); display: inline-block; letter-spacing: 0.02em; text-transform: uppercase; }
-        .answer-box { background: white; border: 1px solid var(--border-color); border-radius: 1rem; padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.01); }
+        .answer-box { background: white; border: 1.5px solid var(--border-color); border-radius: 1rem; padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .pdf-icon-lg { width: 3.5rem; height: 3.5rem; background: #fef2f2; color: #ef4444; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.15); }
         
-        /* Profile View Enhancements */
-        .profile-header-bg { background: linear-gradient(135deg, var(--primary), var(--secondary)); height: 8rem; position: relative; }
-        .profile-img-wrap { margin-top: -4rem; margin-bottom: 1rem; display: inline-block; }
-        .profile-img { width: 8rem; height: 8rem; border-radius: 50%; border: 6px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.1); object-fit: cover; }
-        .profile-img-placeholder { width: 8rem; height: 8rem; border-radius: 50%; border: 6px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: #f3e8f4; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; }
+        /* Mobile Optimized Profile Section */
+        .profile-card { background: white; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; margin-top: 1rem; }
+        .profile-header-bg { background: linear-gradient(135deg, var(--primary), var(--secondary)); height: 7.5rem; position: relative; border-radius: 1.5rem 1.5rem 0 0; }
+        .profile-img-wrap { text-align: center; margin-top: -4.5rem; margin-bottom: 1rem; position: relative; z-index: 2; }
+        .profile-img { width: 7.5rem; height: 7.5rem; border-radius: 50%; border: 5px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.1); object-fit: cover; background: white;}
+        .profile-img-placeholder { width: 7.5rem; height: 7.5rem; border-radius: 50%; border: 5px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: #f3e8f4; color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; }
         .stat-box { background: var(--bg-color); border-radius: 1rem; padding: 1.25rem; text-align: center; border: 1px solid rgba(0,0,0,0.03); }
+
+        @media (max-width: 640px) {
+            .app-container { padding: 1rem 0.75rem; }
+            .profile-header-bg { height: 6rem; }
+            .profile-img-wrap { margin-top: -3.5rem; }
+            .profile-img, .profile-img-placeholder { width: 6rem; height: 6rem; font-size: 2.2rem; }
+            .card-body { padding: 1.25rem 1rem; }
+            .card-footer { padding: 1rem; }
+        }
 
         /* Toasts */
         #toast-container { position: fixed; right: 1rem; bottom: 1rem; z-index: 250; display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 24rem; }
@@ -213,18 +245,18 @@
 <div id="auth-screen" class="auth-overlay">
     <div class="auth-box">
         <div class="auth-icon-wrap">
-            <img src="1000059063.png" alt="Mewar University Logo" onerror="this.src=''; this.alt='Mewar University'; this.style.fontSize='1.5rem'; this.style.fontWeight='bold'; this.style.color='var(--primary)';">
+            <img src="icon.png" alt="Mewar University Logo" onerror="this.src=''; this.alt='Mewar University'; this.style.fontSize='1.5rem'; this.style.fontWeight='bold'; this.style.color='var(--primary)';">
         </div>
-        <h1 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Welcome to Mewar University</h1>
-        <p class="text-muted mb-5">The official discussion and study material platform.</p>
+        <h1 style="font-size: 1.75rem; margin-bottom: 0.5rem; letter-spacing:-0.02em;">Welcome to Mewar University</h1>
+        <p class="text-muted mb-5" style="font-weight: 500;">The official discussion and study material platform.</p>
         
         <button id="google-login-btn" type="button" class="btn btn-outline w-full flex-row justify-center gap-3">
             <i class="fab fa-google text-danger"></i>
             Continue with Google
         </button>
         
-        <p id="auth-error" class="hidden mt-4 text-sm" style="color: var(--danger); font-weight:600;"></p>
-        <p class="text-xs text-muted mt-5">Sign in securely using your Google account.</p>
+        <p id="auth-error" class="hidden mt-4 text-sm" style="color: var(--danger); font-weight:700;"></p>
+        <p class="text-xs text-muted mt-5 font-bold">Sign in securely using your Google account.</p>
     </div>
 </div>
 
@@ -235,26 +267,24 @@
     <nav class="navbar">
         <div class="nav-inner">
             <!-- LOGO -->
-            <button type="button" onclick="navigate('home')" class="nav-logo">
-                <img src="1000059063.png" alt="Logo" class="nav-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <div style="display: none;">
-                    <div style="font-weight: 800; font-size: 1.125rem; color: var(--primary);">Mewar University</div>
-                </div>
-            </button>
+            <div class="nav-logo" onclick="navigate('home')">
+                <img src="icon.png" alt="Logo" class="nav-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="nav-logo-text">Mewar University</div>
+            </div>
 
             <!-- NAVIGATION LINKS -->
             <div class="nav-links">
                 <button id="nav-home-btn" onclick="navigate('home')" class="nav-btn active">
-                    <i class="fas fa-comments"></i> <span>Q&A</span>
+                    <i class="fas fa-comments"></i> <span class="hidden sm:inline">Q&A</span>
                 </button>
                 <button id="nav-notes-btn" onclick="navigate('notes')" class="nav-btn">
-                    <i class="fas fa-book"></i> <span>Materials</span>
+                    <i class="fas fa-book"></i> <span class="hidden sm:inline">Materials</span>
                 </button>
                 <button id="nav-profile-btn" onclick="navigate('profile')" class="nav-btn">
-                    <i class="fas fa-user-circle"></i> <span>Profile</span>
+                    <i class="fas fa-user-circle"></i> <span class="hidden sm:inline">Profile</span>
                 </button>
                 <button id="admin-nav-btn" onclick="navigate('admin')" class="nav-btn hidden">
-                    <i class="fas fa-shield-halved"></i> <span>Admin</span>
+                    <i class="fas fa-shield-halved"></i> <span class="hidden sm:inline">Admin</span>
                 </button>
 
                 <!-- ADMIN MODE TOGGLES -->
@@ -265,7 +295,7 @@
                 </div>
 
                 <!-- LOGOUT -->
-                <button id="logout-btn" type="button" class="nav-btn nav-btn-logout" style="margin-left: 0.5rem;">
+                <button id="logout-btn" type="button" class="nav-btn nav-btn-logout" style="margin-left: 0.25rem;">
                     <i class="fas fa-right-from-bracket"></i> <span class="hidden sm:inline">Logout</span>
                 </button>
             </div>
@@ -288,7 +318,7 @@
             <div class="card-header-icon" style="width: 3rem; height: 3rem; border-radius: 50%;"><i class="fas fa-user-edit"></i></div>
             <div>
                 <h2>Your Profile</h2>
-                <p class="text-sm text-muted">Complete your setup</p>
+                <p class="text-sm text-muted font-bold">Complete your setup</p>
             </div>
         </div>
 
@@ -310,7 +340,7 @@
             <div id="passcode-container" class="form-group hidden">
                 <label class="form-label">Security Passcode</label>
                 <input id="profile-passcode" type="password" class="form-control" placeholder="Enter security passcode">
-                <p class="text-xs text-muted mt-2">Required for Faculty and Admin authentication.</p>
+                <p class="text-xs text-muted mt-2 font-bold">Required for Faculty and Admin authentication.</p>
             </div>
             
             <div class="flex-row gap-3 mt-5">
@@ -325,12 +355,12 @@
 <div id="pdf-modal" class="modal-overlay pdf-modal-bg hidden">
     <div class="pdf-box fade-in">
         <div class="pdf-header">
-            <div id="pdf-title" class="font-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; font-size: 1.1rem;">File Viewer</div>
+            <div id="pdf-title" class="font-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; font-size: 1.1rem;">File Viewer</div>
             <div class="flex-row gap-3">
                 <a id="pdf-download" href="#" class="btn btn-primary btn-sm" style="border-radius: 2rem;">
-                    <i class="fas fa-download" style="margin-right: 0.4rem;"></i> Download File
+                    <i class="fas fa-download" style="margin-right: 0.4rem;"></i> <span class="hidden sm:inline">Download</span>
                 </a>
-                <button type="button" onclick="closePdfViewer()" class="btn-icon" style="background: var(--ios-gray); color: var(--text-main); width:2.5rem; height:2.5rem; border-radius:50%;">
+                <button type="button" onclick="closePdfViewer()" class="btn-icon" style="background: var(--ios-gray); color: var(--text-main); width:2.4rem; height:2.4rem; border-radius:50%;">
                     <i class="fas fa-xmark"></i>
                 </button>
             </div>
@@ -342,7 +372,7 @@
         <div id="docx-msg" class="hidden" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#e5e5ea; color:#6b7280; text-align:center; padding:2rem;">
             <i class="fas fa-file-word" style="font-size:4.5rem; color:#2563eb; margin-bottom:1.5rem;"></i>
             <h3 style="color:#111827; margin-bottom:0.5rem;">Preview Not Supported</h3>
-            <p>Word documents cannot be previewed directly in the browser.<br>Please click the <b>Download File</b> button above to view it.</p>
+            <p style="font-weight: 500;">Word documents cannot be previewed directly in the browser.<br>Please click the <b>Download</b> button above to view it.</p>
         </div>
     </div>
 </div>
@@ -363,7 +393,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { getDatabase, ref as rtdbRef, get, set, push, remove, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+import { getDatabase, ref as rtdbRef, get, set, push, remove, onValue, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
 /* FIREBASE CONFIG */
 const firebaseConfig = {
@@ -698,7 +728,7 @@ window.submitAnswer = async function(event, questionId) {
     } catch (e) { showToast("Failed to post answer.", "error"); }
 };
 
-/* MODIFIED: DIRECT FILE UPLOAD LOGIC (BASE64 IN RTDB) */
+/* FILE UPLOAD LOGIC (BASE64 IN RTDB) */
 window.addNote = async function(event) {
     event.preventDefault();
     if (!currentUser) return;
@@ -715,7 +745,6 @@ window.addNote = async function(event) {
     
     const file = fileInput.files[0];
     
-    // Safety check: Realtime DB can freeze on very large strings. Limit to 3MB.
     if(file.size > 3 * 1024 * 1024) {
         showToast("File is too large! Please upload files under 3MB.", "error");
         return;
@@ -725,13 +754,13 @@ window.addNote = async function(event) {
     
     const reader = new FileReader();
     reader.onload = async function(e) {
-        const base64DataUrl = e.target.result; // Complete base64 string
+        const base64DataUrl = e.target.result;
         
         try {
             await set(push(rtdbRef(db, 'notes')), {
                 title, 
                 subject, 
-                pdfUrl: base64DataUrl, // Saving base64 string directly to DB
+                pdfUrl: base64DataUrl, 
                 fileName: file.name, 
                 authorId: currentUser.uid, 
                 authorName: getCurrentUserName(), 
@@ -741,7 +770,6 @@ window.addNote = async function(event) {
             form.reset();
             showToast("Study material uploaded successfully.", "success");
         } catch (err) { 
-            console.error("Upload error:", err);
             showToast("Upload failed. Database issue.", "error"); 
         } finally {
             showLoading(false);
@@ -752,25 +780,40 @@ window.addNote = async function(event) {
         showToast("Failed to read the file.", "error");
     };
     
-    // Start reading file as Data URL (Base64)
     reader.readAsDataURL(file);
+};
+
+/* EDIT PDF/NOTE NAME */
+window.editNoteTitle = async function(id) {
+    const n = appData.notes.find(i => i.id === id);
+    if (!n) return;
+
+    const isOwner = currentUser.uid === n.authorId;
+    const isAdmin = currentUserProfile?.role === "admin";
+    if (!isOwner && !isAdmin) { showToast("Action denied.", "error"); return; }
+
+    const newTitle = prompt("Edit Document Name:", n.title);
+    if (newTitle !== null && newTitle.trim() !== "") {
+        try {
+            await update(rtdbRef(db, 'notes/' + id), { title: newTitle.trim() });
+            showToast("Document name updated.", "success");
+        } catch (e) {
+            showToast("Error updating name.", "error");
+        }
+    }
 };
 
 /* STRICT DELETION PERMISSIONS */
 window.deleteQuestion = async function(id) {
     const q = appData.questions.find(i => i.id === id);
     if (!q) return;
-    
-    // Strict Verification check
     const isOwner = currentUser.uid === q.authorId;
     const isAdmin = currentUserProfile?.role === "admin";
     if (!isOwner && !isAdmin) { showToast("Action denied. You don't have permission.", "error"); return; }
     
     if (!confirm("Are you sure you want to delete this question?")) return;
-    
     try {
         await remove(rtdbRef(db, 'questions/' + id));
-        // Cleanup associated answers
         appData.answers.filter(a => a.questionId === id).forEach(async a => {
             try { await remove(rtdbRef(db, 'answers/' + a.id)); } catch (e) {}
         });
@@ -781,7 +824,6 @@ window.deleteQuestion = async function(id) {
 window.deleteAnswer = async function(id) {
     const a = appData.answers.find(i => i.id === id);
     if (!a) return;
-    
     const isOwner = currentUser.uid === a.authorId;
     const isAdmin = currentUserProfile?.role === "admin";
     if (!isOwner && !isAdmin) { showToast("Action denied. You don't have permission.", "error"); return; }
@@ -796,7 +838,6 @@ window.deleteAnswer = async function(id) {
 window.deleteNote = async function(id) {
     const n = appData.notes.find(i => i.id === id);
     if (!n) return;
-
     const isOwner = currentUser.uid === n.authorId;
     const isAdmin = currentUserProfile?.role === "admin";
     if (!isOwner && !isAdmin) { showToast("Action denied.", "error"); return; }
@@ -814,18 +855,16 @@ window.openPdfViewer = function(base64Data, title, fileName) {
     
     DOM.pdfTitle.textContent = title;
     DOM.pdfDownload.href = base64Data;
-    DOM.pdfDownload.download = fileName || "Document"; // Forces browser to download with exact filename
+    DOM.pdfDownload.download = fileName || "Document"; 
     
     const isWordFile = fileName && (fileName.toLowerCase().endsWith('.doc') || fileName.toLowerCase().endsWith('.docx'));
     const msgBox = document.getElementById('docx-msg');
 
     if (isWordFile) {
-        // Hide iframe, show fallback message (Browser cannot natively render Base64 Word files)
         DOM.pdfFrame.style.display = 'none';
         msgBox.style.display = 'flex';
         msgBox.classList.remove('hidden');
     } else {
-        // It's a PDF or Image, show iframe
         msgBox.style.display = 'none';
         msgBox.classList.add('hidden');
         DOM.pdfFrame.style.display = 'block';
@@ -849,24 +888,25 @@ function renderHome() {
     let html = `<div class="container fade-in">`;
     
     if (canAsk) {
+        // iOS Glassmorphism Card
         html += `
-            <div class="card p-6">
+            <div class="glass-card p-6">
                 <div class="flex-row gap-3 mb-5">
-                    <div class="card-header-icon"><i class="fas fa-edit"></i></div>
+                    <div class="card-header-icon" style="background: linear-gradient(135deg, #111827, #374151);"><i class="fas fa-edit"></i></div>
                     <div>
-                        <h2 style="font-size:1.4rem;">Start a Discussion</h2>
-                        <p class="text-sm text-muted">Got a doubt? Ask Mewar University community.</p>
+                        <h2 style="font-size:1.45rem;">Ask Your Question</h2>
+                        <p class="text-sm text-muted font-bold">Discuss with faculties and student members of Mewar University.</p>
                     </div>
                 </div>
                 <form onsubmit="submitQuestion(event)">
                     <div class="form-group">
-                        <input name="title" required maxlength="150" placeholder="What's your question about?" class="form-control" style="background:#f9fafb; font-weight:600;">
+                        <input name="title" required maxlength="150" placeholder="What's your question about?" class="form-control" style="background: rgba(255,255,255,0.9);">
                     </div>
                     <div class="form-group">
-                        <textarea name="body" required maxlength="3000" rows="3" placeholder="Provide more details..." class="form-control" style="background:#f9fafb;"></textarea>
+                        <textarea name="body" required maxlength="3000" rows="3" placeholder="Provide more details..." class="form-control" style="background: rgba(255,255,255,0.9);"></textarea>
                     </div>
                     <div class="flex-row justify-end mt-4">
-                        <button type="submit" class="btn btn-primary" style="border-radius:2rem; padding: 0.8rem 2rem;"><i class="fas fa-paper-plane"></i> Post</button>
+                        <button type="submit" class="btn btn-primary" style="border-radius:2rem; padding: 0.8rem 2.2rem;"><i class="fas fa-paper-plane"></i> Post Question</button>
                     </div>
                 </form>
             </div>
@@ -877,7 +917,7 @@ function renderHome() {
         <div class="flex-row justify-between mb-4 mt-2">
             <div>
                 <h2>Recent Q&A</h2>
-                <p class="text-sm text-muted">Explore discussions on campus.</p>
+                <p class="text-sm text-muted font-bold">Explore discussions on campus.</p>
             </div>
             <span class="badge">${appData.questions.length} ${appData.questions.length === 1 ? "Post" : "Posts"}</span>
         </div>
@@ -888,7 +928,7 @@ function renderHome() {
             <div class="empty-state">
                 <div class="empty-icon"><i class="fas fa-comments"></i></div>
                 <h3>No discussions yet</h3>
-                <p class="text-sm text-muted mt-2">Be the first to start a conversation.</p>
+                <p class="text-sm text-muted mt-2 font-bold">Be the first to start a conversation.</p>
             </div>
         `;
     }
@@ -896,7 +936,6 @@ function renderHome() {
     for (const q of appData.questions) {
         const answers = appData.answers.filter(a => a.questionId === q.id);
         
-        // Strict rendering condition for Delete button
         const isOwner = currentUser && q.authorId === currentUser.uid;
         const isAdmin = currentUserProfile && currentUserProfile.role === "admin";
         
@@ -914,13 +953,14 @@ function renderHome() {
                         ${isOwner || isAdmin ? `<button onclick="deleteQuestion('${q.id}')" class="btn-icon" title="Delete Post"><i class="fas fa-trash"></i></button>` : ""}
                     </div>
                     <div class="mt-4">
-                        <h3 style="font-size: 1.15rem; margin-bottom: 0.6rem; color: var(--primary);">${escapeHtml(q.title)}</h3>
-                        <p style="color: #374151; white-space: pre-wrap; line-height: 1.6;">${escapeHtml(q.body)}</p>
+                        <!-- HIGHLIGHTED QUESTION -->
+                        <h3 class="highlight-question">${escapeHtml(q.title)}</h3>
+                        <p style="color: #374151; white-space: pre-wrap; line-height: 1.6; font-weight:500;">${escapeHtml(q.body)}</p>
                     </div>
                 </div>
                 
                 <div class="card-footer">
-                    <div class="flex-row gap-2 mb-4" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">
+                    <div class="flex-row gap-2 mb-4" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 700;">
                         <i class="fas fa-comment-dots" style="color: var(--primary);"></i> ${answers.length} ${answers.length === 1 ? "Reply" : "Replies"}
                     </div>
 
@@ -940,7 +980,8 @@ function renderHome() {
                                         </div>
                                         ${isAnsOwner || isAdmin ? `<button onclick="deleteAnswer('${a.id}')" class="btn-icon" style="padding: 0.25rem;"><i class="fas fa-trash text-sm"></i></button>` : ""}
                                     </div>
-                                    <p style="color: #4b5563; white-space: pre-wrap; font-size:0.95rem; line-height:1.5;">${escapeHtml(a.body)}</p>
+                                    <!-- HIGHLIGHTED ANSWER -->
+                                    <p class="highlight-answer">${escapeHtml(a.body)}</p>
                                 </div>
                             `}).join("")}
                         </div>
@@ -975,7 +1016,7 @@ function renderNotes() {
                     <div class="card-header-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                     <div>
                         <h2 style="font-size:1.4rem;">Upload Study Material</h2>
-                        <p class="text-sm text-muted">Share PDF or DOCX files directly from your device (Max 3MB).</p>
+                        <p class="text-sm text-muted font-bold">Share PDF or DOCX files directly from your device (Max 3MB).</p>
                     </div>
                 </div>
                 <!-- DIRECT FILE UPLOAD FORM -->
@@ -1002,7 +1043,7 @@ function renderNotes() {
         <div class="flex-row justify-between mb-4 mt-2">
             <div>
                 <h2>University Materials</h2>
-                <p class="text-sm text-muted">Notes and documents uploaded by faculties.</p>
+                <p class="text-sm text-muted font-bold">Notes and documents uploaded by faculties.</p>
             </div>
             <span class="badge">${appData.notes.length} ${appData.notes.length === 1 ? "File" : "Files"}</span>
         </div>
@@ -1013,7 +1054,7 @@ function renderNotes() {
             <div class="empty-state">
                 <div class="empty-icon"><i class="fas fa-folder-open"></i></div>
                 <h3>No materials found</h3>
-                <p class="text-sm text-muted mt-2">Study documents will appear here.</p>
+                <p class="text-sm text-muted mt-2 font-bold">Study documents will appear here.</p>
             </div>
         `;
     } else {
@@ -1022,7 +1063,6 @@ function renderNotes() {
             const isOwner = currentUser && n.authorId === currentUser.uid;
             const isAdmin = currentUserProfile && currentUserProfile.role === "admin";
             
-            // Icon dynamically changes based on File Type
             const isPDF = n.fileName ? n.fileName.toLowerCase().endsWith('.pdf') : true;
             const iconType = isPDF ? 'fa-file-pdf' : 'fa-file-word';
             const iconColor = isPDF ? '#ef4444' : '#2563eb';
@@ -1031,12 +1071,17 @@ function renderNotes() {
             html += `
                 <div class="card" style="margin-bottom: 0;">
                     <div class="card-body">
-                        <div class="pdf-icon-lg" style="color:${iconColor}; background:${iconBg};"><i class="fas ${iconType}"></i></div>
+                        <div class="flex-row justify-between align-start mb-3">
+                            <div class="pdf-icon-lg" style="color:${iconColor}; background:${iconBg}; margin-bottom:0;"><i class="fas ${iconType}"></i></div>
+                            <!-- EDIT NAME BUTTON (PEN ICON) -->
+                            ${isOwner || isAdmin ? `<button onclick="editNoteTitle('${n.id}')" class="btn-icon" style="color:#d97706; background:#fffbeb;" title="Edit Name"><i class="fas fa-pen"></i></button>` : ""}
+                        </div>
+                        
                         <div style="font-size: 0.75rem; color: var(--primary); font-weight: 800; text-transform: uppercase; margin-bottom: 0.4rem; letter-spacing:0.02em;">
                             ${escapeHtml(n.subject || "Study Note")}
                         </div>
-                        <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; line-height:1.4; word-break: break-all;">${escapeHtml(n.title)}</h3>
-                        <p class="text-xs text-muted mb-5">Uploaded by ${escapeHtml(n.authorName || "Faculty")} • ${formatDate(n.createdAt)}</p>
+                        <h3 class="highlight-question" style="font-size: 1.15rem; word-break: break-all;">${escapeHtml(n.title)}</h3>
+                        <p class="text-xs text-muted mb-5 font-bold">Uploaded by ${escapeHtml(n.authorName || "Faculty")} • ${formatDate(n.createdAt)}</p>
                         
                         <div class="flex-row gap-2">
                             <button onclick="openPdfViewer('${n.pdfUrl}', '${escapeHtml(n.title)}', '${escapeHtml(n.fileName || '')}')" class="btn btn-primary flex-1 btn-sm" style="border-radius:1.5rem; box-shadow:none;">
@@ -1064,10 +1109,10 @@ function renderProfile() {
 
     return `
         <div class="container-sm fade-in">
-            <div class="card" style="overflow: hidden; border-radius:1.5rem;">
+            <div class="profile-card">
                 <div class="profile-header-bg">
-                    <button onclick="editProfile()" class="btn btn-secondary btn-sm" style="position: absolute; right: 1.5rem; top: 1.5rem; background: rgba(255,255,255,0.2); color: white; border-radius:2rem; backdrop-filter:blur(5px);">
-                        <i class="fas fa-pen"></i> Edit
+                    <button onclick="editProfile()" class="btn btn-secondary btn-sm" style="position: absolute; right: 1rem; top: 1rem; background: rgba(255,255,255,0.25); color: white; border-radius:2rem; backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);">
+                        <i class="fas fa-pen"></i> <span class="hidden sm:inline">Edit</span>
                     </button>
                 </div>
                 <div class="p-6 text-center" style="padding-top:0;">
@@ -1075,18 +1120,18 @@ function renderProfile() {
                         ${photo ? `<img src="${escapeHtml(photo)}" class="profile-img" alt="Profile">` 
                                 : `<div class="profile-img-placeholder">${escapeHtml(name.charAt(0).toUpperCase())}</div>`}
                     </div>
-                    <h1 style="font-size: 1.75rem; letter-spacing:-0.02em;">${escapeHtml(name)}</h1>
-                    <p class="text-muted mt-1" style="font-size:0.95rem;">${escapeHtml(email)}</p>
+                    <h1 style="font-size: 1.8rem; letter-spacing:-0.02em;">${escapeHtml(name)}</h1>
+                    <p class="text-muted mt-1 font-bold" style="font-size:0.95rem;">${escapeHtml(email)}</p>
                     <div class="badge mt-3" style="font-size: 0.8rem; padding: 0.4rem 1.2rem; margin-bottom:1rem;"><i class="fas fa-university"></i> ${getRoleLabel(role)}</div>
                     
                     <div class="grid-2 mt-4" style="border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
                         <div class="stat-box">
-                            <div class="text-xs text-muted mb-1 font-bold text-uppercase">Questions Asked</div>
-                            <div style="font-size: 1.75rem; font-weight: 800; color:var(--primary);">${qCount}</div>
+                            <div class="text-xs text-muted mb-1 font-extrabold text-uppercase">Questions Asked</div>
+                            <div style="font-size: 1.75rem; font-weight: 900; color:var(--primary);">${qCount}</div>
                         </div>
                         <div class="stat-box">
-                            <div class="text-xs text-muted mb-1 font-bold text-uppercase">Materials Uploaded</div>
-                            <div style="font-size: 1.75rem; font-weight: 800; color:var(--secondary);">${nCount}</div>
+                            <div class="text-xs text-muted mb-1 font-extrabold text-uppercase">Materials Uploaded</div>
+                            <div style="font-size: 1.75rem; font-weight: 900; color:var(--secondary);">${nCount}</div>
                         </div>
                     </div>
                 </div>
@@ -1101,7 +1146,7 @@ function renderAdmin() {
             <div class="container-sm text-center" style="padding-top: 5rem;">
                 <div class="empty-icon" style="color: var(--danger); background: #fee2e2; width:5rem; height:5rem; font-size:2rem;"><i class="fas fa-lock"></i></div>
                 <h2>Access Restricted</h2>
-                <p class="text-muted mt-2">Administrator privileges required to view this area.</p>
+                <p class="text-muted mt-2 font-bold">Administrator privileges required to view this area.</p>
             </div>
         `;
     }
@@ -1110,24 +1155,24 @@ function renderAdmin() {
         <div class="container-lg fade-in">
             <div>
                 <h1 style="color:var(--primary);">Control Center</h1>
-                <p class="text-muted mt-1">Platform overview & management tools.</p>
+                <p class="text-muted mt-1 font-bold">Platform overview & management tools.</p>
             </div>
             <div class="grid-admin mt-5">
                 <div class="card p-5 text-center" style="margin-bottom:0;">
-                    <div class="text-sm text-muted font-bold">Total Posts</div>
-                    <div style="font-size: 2.2rem; font-weight: 800; color:var(--primary);">${appData.questions.length}</div>
+                    <div class="text-sm text-muted font-extrabold">Total Posts</div>
+                    <div style="font-size: 2.2rem; font-weight: 900; color:var(--primary);">${appData.questions.length}</div>
                 </div>
                 <div class="card p-5 text-center" style="margin-bottom:0;">
-                    <div class="text-sm text-muted font-bold">Total Replies</div>
-                    <div style="font-size: 2.2rem; font-weight: 800; color:var(--secondary);">${appData.answers.length}</div>
+                    <div class="text-sm text-muted font-extrabold">Total Replies</div>
+                    <div style="font-size: 2.2rem; font-weight: 900; color:var(--secondary);">${appData.answers.length}</div>
                 </div>
                 <div class="card p-5 text-center" style="margin-bottom:0;">
-                    <div class="text-sm text-muted font-bold">Study Materials</div>
-                    <div style="font-size: 2.2rem; font-weight: 800; color:#2563eb;">${appData.notes.length}</div>
+                    <div class="text-sm text-muted font-extrabold">Study Materials</div>
+                    <div style="font-size: 2.2rem; font-weight: 900; color:#2563eb;">${appData.notes.length}</div>
                 </div>
                 <div class="card p-5 text-center" style="margin-bottom:0;">
-                    <div class="text-sm text-muted font-bold">Preview Mode</div>
-                    <div style="font-size: 1.5rem; font-weight: 800; margin-top:0.7rem; text-transform: capitalize; color:#16a34a;">${escapeHtml(adminActiveMode)}</div>
+                    <div class="text-sm text-muted font-extrabold">Preview Mode</div>
+                    <div style="font-size: 1.5rem; font-weight: 900; margin-top:0.7rem; text-transform: capitalize; color:#16a34a;">${escapeHtml(adminActiveMode)}</div>
                 </div>
             </div>
             <div class="card p-6 mt-4">
