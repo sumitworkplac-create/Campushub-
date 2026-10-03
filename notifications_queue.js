@@ -1,7 +1,10 @@
 const admin = require("firebase-admin");
 
-// serviceAccountKey.json se credentials load karein
-const serviceAccount = require("./serviceAccountKey.json");
+// Render ke Environment Variable se JSON read karein
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+// ASN.1 parsing error theek karne ke liye newlines format karein
+serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
