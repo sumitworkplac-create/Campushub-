@@ -1,4 +1,14 @@
+const http = require("http");
 const admin = require("firebase-admin");
+
+// Render Web Service ke liye port listener (port detect hote hi status "Live" ho jayega)
+const PORT = process.env.PORT || 10000;
+http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("CampusHub Notification Worker is Live!\n");
+}).listen(PORT, () => {
+  console.log(`Worker listening on port ${PORT}`);
+});
 
 // Render ke Environment Variable se JSON read karein
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
