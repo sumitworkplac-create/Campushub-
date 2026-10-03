@@ -1,12 +1,11 @@
 const admin = require("firebase-admin");
 
-// Using Environment Variables to avoid JSON file signature issues
+// Direct JSON configuration to avoid environment variable parsing issues
 admin.initializeApp({
   credential: admin.credential.cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    // Replacing escaped newlines for private key
-    privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined
+    projectId: "campu-6ae68",
+    clientEmail: "firebase-adminsdk-fbsvc@campu-6ae68.iam.gserviceaccount.com", // Apni service account email yahan daalein
+    privateKey: "-----BEGIN PRIVATE KEY-----\nAAPKA_ASLI_PRIVATE_KEY_YAHAN_PASTE_KAREIN\n-----END PRIVATE KEY-----\n" 
   }),
   databaseURL: "https://campu-6ae68-default-rtdb.firebaseio.com"
 });
