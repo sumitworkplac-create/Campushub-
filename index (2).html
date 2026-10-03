@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusHub - Student & Faculty Q&A Platform</title>
+
+    <!-- Font Awesome (For Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Normal Custom CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #4f46e5; 
+            --primary-hover: #4338ca; 
+            --bg-color: #f9fafb; 
+            --card-bg: #ffffff;
+            --text-main: #111827; 
+            --text-muted: #6b7280; 
+            --border-color: #e5e7eb; 
+            --danger: #dc2626; 
+            --success: #16a34a; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        
+        .fade-in { animation: fadeIn .25s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
+
+        h1, h2, h3 { color: var(--text-main); font-weight: 700; }
+        .text-center { text-align: center; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .text-muted { color: var(--text-muted); }
+        .font-bold { font-weight: 700; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-5 { margin-top: 1.25rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-5 { margin-bottom: 1.25rem; }
+        .p-4 { padding: 1rem; }
+        .p-5 { padding: 1.25rem; }
+        .p-6 { padding: 1.5rem; }
+        .w-full { width: 100%; }
+        .flex-1 { flex: 1; min-width: 0; }
+
+        .app-container { flex: 1; overflow-y: auto; padding: 1.5rem; }
+        .container { max-width: 56rem; margin: 0 auto; }
+        .container-lg { max-width: 64rem; margin: 0 auto; }
+        .container-sm { max-width: 42rem; margin: 0 auto; }
+        
+        .flex-row { display: flex; align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .justify-end { justify-content: flex-end; }
+        .align-start { align-items: flex-start; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+
+        .navbar { background: var(--primary); color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); z-index: 30; flex-shrink: 0; }
+        .nav-inner { max-width: 80rem; margin: 0 auto; padding: 0 1rem; display: flex; height: 4rem; align-items: center; justify-content: space-between; }
+        .nav-logo { display: flex; align-items: center; gap: 0.75rem; background: none; border: none; color: white; cursor: pointer; text-align: left; }
+        .nav-icon { width: 2.25rem; height: 2.25rem; background: rgba(255,255,255,0.15); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .nav-links { display: flex; align-items: center; gap: 0.5rem; }
+        .nav-btn { background: transparent; border: none; color: white; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 0.25rem; }
+        .nav-btn:hover, .nav-btn.active { background: var(--primary-hover); }
+        .nav-btn-logout:hover { background: rgba(239, 68, 68, 0.8); }
+        
+        .admin-toggles { background: #3730a3; padding: 0.25rem; border-radius: 0.5rem; display: flex; align-items: center; margin-left: 0.25rem; }
+        .btn-role { background: transparent; border: none; color: #c7d2fe; padding: 0.25rem 0.6rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .btn-role:hover { color: white; }
+        .btn-role.active { background: white; color: var(--primary); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        
+        .admin-banner { background: #fffbeb; border-bottom: 1px solid #fde68a; color: #92400e; padding: 0.5rem 1rem; text-align: center; font-size: 0.875rem; font-weight: 600; }
+
+        .auth-overlay { position: fixed; inset: 0; z-index: 100; background: var(--bg-color); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .auth-box { background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 2rem; width: 100%; max-width: 28rem; text-align: center; }
+        .auth-icon-wrap { width: 5rem; height: 5rem; background: #e0e7ff; color: var(--primary); border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 2.25rem; margin: 0 auto 1.5rem; }
+
+        .modal-overlay { position: fixed; inset: 0; z-index: 150; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-content { background: white; border-radius: 1rem; padding: 1.5rem; width: 100%; max-width: 28rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        
+        .pdf-modal-bg { background: rgba(0,0,0,0.7); }
+        .pdf-box { background: white; width: 100%; max-width: 72rem; height: 92vh; border-radius: 0.75rem; overflow: hidden; display: flex; flex-direction: column; }
+        .pdf-header { height: 3.5rem; padding: 0 1rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; }
+        .pdf-iframe { flex: 1; width: 100%; border: none; }
+
+        .loader-box { background: white; border-radius: 1rem; padding: 1.5rem 1.75rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); text-align: center; min-width: 14rem; }
+        .spinner { width: 2.5rem; height: 2.5rem; border: 4px solid #e0e7ff; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .card { background: white; border-radius: 0.75rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid var(--border-color); overflow: hidden; margin-bottom: 1.5rem; }
+        .card-header-icon { width: 2.5rem; height: 2.5rem; background: #e0e7ff; color: var(--primary); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .card-body { padding: 1.25rem; }
+        .card-footer { background: var(--bg-color); border-top: 1px solid var(--border-color); padding: 1.25rem; }
+        .empty-state { border: 1px dashed #d1d5db; border-radius: 0.75rem; padding: 2.5rem; text-align: center; background: white; }
+        .empty-icon { width: 3.5rem; height: 3.5rem; background: #f3f4f6; color: #9ca3af; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 1rem; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.25rem; }
+        .form-control { width: 100%; border: 1px solid #d1d5db; border-radius: 0.75rem; padding: 0.75rem 1rem; font-size: 1rem; font-family: inherit; outline: none; transition: 0.2s; background: white; }
+        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
+        textarea.form-control { resize: none; min-height: 100px; }
+
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: inherit; font-weight: 700; border-radius: 0.75rem; padding: 0.75rem 1.25rem; border: 1px solid transparent; cursor: pointer; transition: 0.2s; font-size: 1rem; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+        .btn-outline { background: white; border-color: #d1d5db; color: var(--text-main); }
+        .btn-outline:hover { background: #f3f4f6; }
+        .btn-secondary { background: #f3f4f6; color: #374151; }
+        .btn-secondary:hover { background: #e5e7eb; }
+        
+        .btn-icon { background: transparent; border: none; color: #9ca3af; cursor: pointer; padding: 0.5rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .btn-icon:hover { color: var(--danger); background: #fee2e2; }
+        
+        .btn-sm { padding: 0.5rem 0.75rem; font-size: 0.875rem; }
+        .btn-send { background: var(--primary); color: white; width: 3rem; border-radius: 0.75rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-send:hover { background: var(--primary-hover); }
+
+        .avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); }
+        .avatar-placeholder { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: #e0e7ff; color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; }
+        .user-name { font-weight: 700; color: var(--text-main); font-size: 0.875rem; }
+        .user-meta { font-size: 0.75rem; color: var(--text-muted); }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media(min-width: 640px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+        
+        .grid-notes { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+        @media(min-width: 640px) { .grid-notes { grid-template-columns: repeat(2, 1fr); } }
+        @media(min-width: 1024px) { .grid-notes { grid-template-columns: repeat(3, 1fr); } }
+
+        .grid-admin { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media(min-width: 640px) { .grid-admin { grid-template-columns: repeat(2, 1fr); } }
+        @media(min-width: 1024px) { .grid-admin { grid-template-columns: repeat(4, 1fr); } }
+
+        .badge { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: #e0e7ff; color: var(--primary); display: inline-block; }
+        .answer-box { background: white; border: 1px solid var(--border-color); border-radius: 0.75rem; padding: 1rem; margin-bottom: 1rem; }
+        .pdf-icon-lg { width: 3rem; height: 3rem; background: #fef2f2; color: #ef4444; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: 1rem; }
+        
+        .profile-header-bg { background: linear-gradient(to right, var(--primary), var(--primary-hover)); height: 7rem; position: relative; }
+        .profile-img-wrap { margin-top: -3rem; margin-bottom: 1.25rem; }
+        .profile-img { width: 6rem; height: 6rem; border-radius: 1rem; border: 4px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); object-fit: cover; }
+        .profile-img-placeholder { width: 6rem; height: 6rem; border-radius: 1rem; border: 4px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: #e0e7ff; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2.25rem; font-weight: bold; }
+        .stat-box { background: var(--bg-color); border-radius: 0.75rem; padding: 1rem; text-align: center; }
+
+        #toast-container { position: fixed; right: 1rem; bottom: 1rem; z-index: 250; display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 24rem; }
+        .toast { color: white; padding: 0.75rem 1rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; font-weight: 600; animation: fadeIn 0.3s; }
+        .toast-success { background: var(--success); }
+        .toast-error { background: var(--danger); }
+        .toast-info { background: var(--primary); }
+        .toast-warning { background: #f59e0b; color: white; }
+        .toast-close { background: transparent; border: none; color: white; cursor: pointer; font-size: 1rem; opacity: 0.8; }
+        .toast-close:hover { opacity: 1; }
+    </style>
+</head>
+
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="auth-overlay">
+    <div class="auth-box">
+        <div class="auth-icon-wrap">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h1 style="font-size: 1.875rem; margin-bottom: 0.5rem;">Welcome to CampusHub</h1>
+        <p class="text-muted mb-5">The ultimate discussion and study notes platform for students and faculty.</p>
+        
+        <button id="google-login-btn" type="button" class="btn btn-outline w-full flex-row justify-center gap-3" style="padding: 0.875rem;">
+            <i class="fab fa-google text-danger"></i>
+            Continue with Google
+        </button>
+        
+        <p id="auth-error" class="hidden mt-4 text-sm" style="color: var(--danger);"></p>
+        <p class="text-xs text-muted mt-5">Sign in securely with your Google account.</p>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden flex-1" style="display: flex; flex-direction: column; height: 100vh;">
+    
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-inner">
+            <!-- LOGO -->
+            <button type="button" onclick="navigate('home')" class="nav-logo">
+                <div class="nav-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div>
+                    <div style="font-weight: 800; font-size: 1.125rem; line-height: 1;">CampusHub</div>
+                    <div style="font-size: 0.625rem; color: #c7d2fe;">Student Platform</div>
+                </div>
+            </button>
+
+            <!-- NAVIGATION -->
+            <div class="nav-links">
+                <button id="nav-home-btn" onclick="navigate('home')" class="nav-btn active">
+                    <i class="fas fa-comments"></i> <span>Q&A</span>
+                </button>
+                <button id="nav-notes-btn" onclick="navigate('notes')" class="nav-btn">
+                    <i class="fas fa-book"></i> <span>Notes</span>
+                </button>
+                <button id="nav-profile-btn" onclick="navigate('profile')" class="nav-btn">
+                    <i class="fas fa-user"></i> <span>Profile</span>
+                </button>
+                <button id="admin-nav-btn" onclick="navigate('admin')" class="nav-btn hidden">
+                    <i class="fas fa-shield-halved"></i> <span>Admin</span>
+                </button>
+
+                <!-- ADMIN MODE TOGGLES -->
+                <div id="mode-toggle-container" class="admin-toggles hidden">
+                    <button id="role-btn-admin" onclick="setAdminActiveMode('admin')" class="btn-role active">Admin</button>
+                    <button id="role-btn-faculty" onclick="setAdminActiveMode('faculty')" class="btn-role">Faculty</button>
+                    <button id="role-btn-student" onclick="setAdminActiveMode('student')" class="btn-role">Student</button>
+                </div>
+
+                <!-- LOGOUT -->
+                <button id="logout-btn" type="button" class="nav-btn nav-btn-logout" style="margin-left: 0.25rem;">
+                    <i class="fas fa-right-from-bracket"></i> <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ADMIN PREVIEW BANNER -->
+    <div id="admin-preview-banner" class="admin-banner hidden">
+        <i class="fas fa-eye" style="margin-right: 0.25rem;"></i> Admin Preview Mode — <span id="preview-role-text">Admin</span>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content" class="app-container scrollbar-hide"></main>
+</div>
+
+<!-- PROFILE MODAL -->
+<div id="profile-modal" class="modal-overlay hidden">
+    <div class="modal-content fade-in">
+        <div class="flex-row gap-3 mb-5">
+            <div class="card-header-icon" style="width: 2.75rem; height: 2.75rem;"><i class="fas fa-user-plus"></i></div>
+            <div>
+                <h2>Your Profile</h2>
+                <p class="text-sm text-muted">Set up or edit your CampusHub account</p>
+            </div>
+        </div>
+
+        <form id="profile-form">
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input id="profile-name" type="text" required maxlength="80" class="form-control" placeholder="Enter your full name">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Role</label>
+                <select id="profile-role" required class="form-control">
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty Member</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            
+            <div id="passcode-container" class="form-group hidden">
+                <label class="form-label">Security Passcode</label>
+                <input id="profile-passcode" type="password" class="form-control" placeholder="Enter security passcode">
+                <p class="text-xs text-muted mt-2">Required for Faculty and Admin accounts.</p>
+            </div>
+            
+            <div class="flex-row gap-3 mt-5">
+                <button type="button" onclick="closeProfileModal()" class="btn btn-secondary flex-1">Cancel</button>
+                <button id="save-profile-btn" type="submit" class="btn btn-primary flex-1">Save Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- PDF MODAL -->
+<div id="pdf-modal" class="modal-overlay pdf-modal-bg hidden">
+    <div class="pdf-box fade-in">
+        <div class="pdf-header">
+            <div id="pdf-title" class="font-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%;">PDF Viewer</div>
+            <div class="flex-row gap-2">
+                <a id="pdf-download" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                    <i class="fas fa-download" style="margin-right: 0.25rem;"></i> Download
+                </a>
+                <button type="button" onclick="closePdfViewer()" class="btn-icon" style="background: var(--bg-color); color: var(--text-main);">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+        <iframe id="pdf-frame" class="pdf-iframe" src="" title="PDF Viewer"></iframe>
+    </div>
+</div>
+
+<!-- LOADING OVERLAY -->
+<div id="loading-overlay" class="modal-overlay hidden">
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <div id="loading-text" class="font-bold text-sm" style="color: #374151;">Loading...</div>
+    </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+
+<!-- FIREBASE + APPLICATION SCRIPT -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+// Changed to Realtime Database imports
+import { getDatabase, ref, get, set, push, remove, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+
+/* FIREBASE CONFIG */
+const firebaseConfig = {
+    apiKey: "AIzaSyAOpJD_QrDLccFN-Zd_Rl8uRcLLpu96G4o",
+    authDomain: "campu-6ae68.firebaseapp.com",
+    databaseURL: "https://campu-6ae68-default-rtdb.firebaseio.com",
+    projectId: "campu-6ae68",
+    storageBucket: "campu-6ae68.firebasestorage.app",
+    messagingSenderId: "672693690045",
+    appId: "1:672693690045:web:f7adea05f84586e928e1d4"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getDatabase(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
+
+/* STATE */
+let currentUser = null;
+let currentUserProfile = null;
+let currentPage = "home";
+let adminActiveMode = "admin";
+let appData = { questions: [], answers: [], notes: [] };
+
+let unsubscribeQuestions = null;
+let unsubscribeAnswers = null;
+let unsubscribeNotes = null;
+
+const passcodes = { admin: "manisha2008", faculty: "mewar faculty" };
+
+/* DOM ELEMENTS */
+const DOM = {
+    authScreen: document.getElementById("auth-screen"),
+    googleLoginBtn: document.getElementById("google-login-btn"),
+    authError: document.getElementById("auth-error"),
+    app: document.getElementById("app"),
+    mainContent: document.getElementById("main-content"),
+    navHomeBtn: document.getElementById("nav-home-btn"),
+    navNotesBtn: document.getElementById("nav-notes-btn"),
+    navProfileBtn: document.getElementById("nav-profile-btn"),
+    adminNavBtn: document.getElementById("admin-nav-btn"),
+    logoutBtn: document.getElementById("logout-btn"),
+    modeToggleContainer: document.getElementById("mode-toggle-container"),
+    previewBanner: document.getElementById("admin-preview-banner"),
+    previewRoleText: document.getElementById("preview-role-text"),
+    profileModal: document.getElementById("profile-modal"),
+    profileForm: document.getElementById("profile-form"),
+    profileName: document.getElementById("profile-name"),
+    profileRole: document.getElementById("profile-role"),
+    profilePasscode: document.getElementById("profile-passcode"),
+    passcodeContainer: document.getElementById("passcode-container"),
+    pdfModal: document.getElementById("pdf-modal"),
+    pdfFrame: document.getElementById("pdf-frame"),
+    pdfTitle: document.getElementById("pdf-title"),
+    pdfDownload: document.getElementById("pdf-download"),
+    loadingOverlay: document.getElementById("loading-overlay"),
+    loadingText: document.getElementById("loading-text"),
+    toastContainer: document.getElementById("toast-container")
+};
+
+/* UTILITIES */
+function escapeHtml(value) {
+    if (value == null) return "";
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function showLoading(show, message = "Loading...") {
+    DOM.loadingText.textContent = message;
+    if (show) {
+        DOM.loadingOverlay.classList.remove("hidden");
+        DOM.loadingOverlay.classList.add("flex");
+    } else {
+        DOM.loadingOverlay.classList.add("hidden");
+        DOM.loadingOverlay.classList.remove("flex");
+    }
+}
+
+function showToast(message, type = "success") {
+    const toast = document.createElement("div");
+    const icons = { success: "fa-circle-check", error: "fa-circle-exclamation", info: "fa-circle-info", warning: "fa-triangle-exclamation" };
+    
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+        <i class="fas ${icons[type] || icons.info}"></i>
+        <span style="flex: 1;">${escapeHtml(message)}</span>
+        <button type="button" class="toast-close"><i class="fas fa-xmark"></i></button>
+    `;
+    toast.querySelector("button").addEventListener("click", () => toast.remove());
+    DOM.toastContainer.appendChild(toast);
+    setTimeout(() => { if (toast.isConnected) toast.remove(); }, 4000);
+}
+
+function formatDate(timestamp) {
+    if (!timestamp) return "Just now";
+    try {
+        const date = new Date(timestamp);
+        if (Number.isNaN(date.getTime())) return "Just now";
+        return date.toLocaleString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "numeric", minute: "2-digit" });
+    } catch { return "Just now"; }
+}
+
+function generateAvatar(name = "User", photoURL = "") {
+    const firstLetter = name.trim().charAt(0).toUpperCase() || "U";
+    if (photoURL) {
+        return `
+            <img src="${escapeHtml(photoURL)}" alt="Profile" class="avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div class="avatar-placeholder hidden">${escapeHtml(firstLetter)}</div>
+        `;
+    }
+    return `<div class="avatar-placeholder">${escapeHtml(firstLetter)}</div>`;
+}
+
+function getRoleLabel(role) {
+    if (role === "admin") return "Admin";
+    if (role === "faculty") return "Faculty";
+    return "Student";
+}
+
+function getEffectiveRole() {
+    if (currentUserProfile && currentUserProfile.role === "admin") return adminActiveMode;
+    return currentUserProfile?.role || "student";
+}
+
+function getCurrentUserName() {
+    return currentUserProfile?.name || currentUser?.displayName || currentUser?.email?.split("@")[0] || "User";
+}
+
+/* NAVIGATION */
+window.navigate = function(page) {
+    if (!currentUser) return;
+    currentPage = page;
+    render();
+};
+
+window.setAdminActiveMode = function(mode) {
+    if (!["admin", "faculty", "student"].includes(mode)) return;
+    if (currentUserProfile?.role !== "admin") return;
+    adminActiveMode = mode;
+    currentPage = mode === "admin" ? "admin" : "home";
+    render();
+};
+
+/* AUTHENTICATION */
+async function loginWithGoogle() {
+    if (!auth) { showToast("Firebase Auth not available.", "error"); return; }
+    DOM.authError.classList.add("hidden");
+    DOM.googleLoginBtn.disabled = true;
+    showLoading(true, "Connecting with Google...");
+    try {
+        await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+        let msg = "Google sign-in failed.";
+        if(error.code === "auth/popup-blocked") msg = "Popup blocked. Allow popups and try again.";
+        else if(error.code === "auth/popup-closed-by-user") msg = "Sign-in cancelled.";
+        DOM.authError.textContent = msg;
+        DOM.authError.classList.remove("hidden");
+        showToast(msg, "error");
+    } finally {
+        DOM.googleLoginBtn.disabled = false;
+        showLoading(false);
+    }
+}
+DOM.googleLoginBtn.addEventListener("click", loginWithGoogle);
+
+async function logout() {
+    try {
+        showLoading(true, "Signing out...");
+        if (unsubscribeQuestions) { unsubscribeQuestions(); unsubscribeQuestions = null; }
+        if (unsubscribeAnswers) { unsubscribeAnswers(); unsubscribeAnswers = null; }
+        if (unsubscribeNotes) { unsubscribeNotes(); unsubscribeNotes = null; }
+        await signOut(auth);
+        currentUser = null; currentUserProfile = null;
+        appData = { questions: [], answers: [], notes: [] };
+        currentPage = "home";
+        DOM.app.classList.remove("flex"); DOM.app.classList.add("hidden");
+        DOM.authScreen.classList.remove("hidden"); DOM.authScreen.classList.add("flex");
+    } catch (error) { showToast("Logout failed.", "error"); } 
+    finally { showLoading(false); }
+}
+DOM.logoutBtn.addEventListener("click", logout);
+
+/* PROFILE MODAL LOGIC */
+window.openProfileModal = function() {
+    DOM.profileModal.classList.remove("hidden"); DOM.profileModal.classList.add("flex");
+};
+window.closeProfileModal = function() {
+    DOM.profileModal.classList.add("hidden"); DOM.profileModal.classList.remove("flex");
+};
+window.editProfile = function() {
+    if(currentUserProfile) {
+        DOM.profileName.value = currentUserProfile.name || "";
+        DOM.profileRole.value = currentUserProfile.role || "student";
+        DOM.profileRole.dispatchEvent(new Event("change"));
+    }
+    openProfileModal();
+}
+
+DOM.profileRole.addEventListener("change", () => {
+    const role = DOM.profileRole.value;
+    if (role === "admin" || role === "faculty") {
+        DOM.passcodeContainer.classList.remove("hidden");
+        DOM.profilePasscode.required = true;
+    } else {
+        DOM.passcodeContainer.classList.add("hidden");
+        DOM.profilePasscode.required = false;
+        DOM.profilePasscode.value = "";
+    }
+});
+
+async function checkProfileAndLoadData() {
+    if (!currentUser) return;
+    try {
+        showLoading(true, "Loading profile...");
+        const userRef = ref(db, 'users/' + currentUser.uid);
+        const userSnap = await get(userRef);
+        
+        if (userSnap.exists()) {
+            currentUserProfile = userSnap.val();
+            DOM.authScreen.classList.add("hidden"); DOM.authScreen.classList.remove("flex");
+            DOM.app.classList.remove("hidden"); DOM.app.classList.add("flex");
+            setupRealtimeListeners();
+            render();
+        } else {
+            DOM.profileName.value = currentUser.displayName || currentUser.email?.split("@")[0] || "";
+            DOM.profileRole.value = "student";
+            DOM.profilePasscode.value = "";
+            DOM.authScreen.classList.add("hidden"); DOM.authScreen.classList.remove("flex");
+            DOM.app.classList.remove("hidden"); DOM.app.classList.add("flex");
+            openProfileModal();
+        }
+    } catch (error) { 
+        console.error(error);
+        showToast("Could not load profile. Check Realtime Database rules.", "error"); 
+    } 
+    finally { showLoading(false); }
+}
+
+DOM.profileForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!currentUser) return;
+    const name = DOM.profileName.value.trim();
+    const role = DOM.profileRole.value;
+    const passcode = DOM.profilePasscode.value;
+    
+    if (!name) { showToast("Please enter name.", "error"); return; }
+    if ((role === "admin" || role === "faculty") && passcode !== passcodes[role]) {
+        showToast("Invalid passcode.", "error"); return;
+    }
+    
+    try {
+        showLoading(true, "Saving profile...");
+        const profileData = {
+            uid: currentUser.uid, 
+            name: name, 
+            role: role,
+            email: currentUser.email || "", 
+            photoURL: currentUser.photoURL || "",
+            provider: "google", 
+            updatedAt: serverTimestamp(),
+            createdAt: currentUserProfile ? currentUserProfile.createdAt : serverTimestamp()
+        };
+        await set(ref(db, 'users/' + currentUser.uid), profileData);
+        currentUserProfile = profileData;
+        closeProfileModal();
+        setupRealtimeListeners();
+        currentPage = "home";
+        render();
+        showToast("Profile updated successfully.", "success");
+    } catch (error) { 
+        console.error(error);
+        showToast("Could not save profile.", "error"); 
+    } 
+    finally { showLoading(false); }
+});
+
+/* REALTIME DATABASE LISTENERS */
+function setupRealtimeListeners() {
+    if (!currentUser) return;
+
+    if (unsubscribeQuestions) unsubscribeQuestions();
+    if (unsubscribeAnswers) unsubscribeAnswers();
+    if (unsubscribeNotes) unsubscribeNotes();
+
+    const questionsRef = ref(db, 'questions');
+    unsubscribeQuestions = onValue(questionsRef, (snapshot) => {
+        const data = snapshot.val();
+        appData.questions = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+        appData.questions.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        render();
+    });
+
+    const answersRef = ref(db, 'answers');
+    unsubscribeAnswers = onValue(answersRef, (snapshot) => {
+        const data = snapshot.val();
+        appData.answers = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+        appData.answers.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+        render();
+    });
+
+    const notesRef = ref(db, 'notes');
+    unsubscribeNotes = onValue(notesRef, (snapshot) => {
+        const data = snapshot.val();
+        appData.notes = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+        appData.notes.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        render();
+    });
+}
+
+/* CRUD ACTIONS (REALTIME DB) */
+window.submitQuestion = async function(event) {
+    event.preventDefault();
+    if (!currentUser) return;
+    const form = event.target;
+    const title = form.querySelector('[name="title"]').value.trim();
+    const body = form.querySelector('[name="body"]').value.trim();
+    if (!title || !body) return;
+    
+    try {
+        const newQRef = push(ref(db, 'questions'));
+        await set(newQRef, {
+            title, body, authorId: currentUser.uid, authorName: getCurrentUserName(),
+            authorRole: getEffectiveRole(), authorPhoto: currentUserProfile?.photoURL || currentUser.photoURL || "",
+            createdAt: serverTimestamp()
+        });
+        form.reset();
+        showToast("Question posted.", "success");
+    } catch (e) { console.error(e); showToast("Error posting question.", "error"); }
+};
+
+window.submitAnswer = async function(event, questionId) {
+    event.preventDefault();
+    if (!currentUser) return;
+    const form = event.target;
+    const body = form.querySelector('[name="answer"]').value.trim();
+    if (!body) return;
+
+    try {
+        const newARef = push(ref(db, 'answers'));
+        await set(newARef, {
+            questionId, body, authorId: currentUser.uid, authorName: getCurrentUserName(),
+            authorRole: getEffectiveRole(), authorPhoto: currentUserProfile?.photoURL || currentUser.photoURL || "",
+            createdAt: serverTimestamp()
+        });
+        form.reset();
+        showToast("Answer added.", "success");
+    } catch (e) { showToast("Error adding answer.", "error"); }
+};
+
+window.addNote = async function(event) {
+    event.preventDefault();
+    if (!currentUser) return;
+    const form = event.target;
+    const title = form.querySelector('[name="title"]').value.trim();
+    const subject = form.querySelector('[name="subject"]').value.trim();
+    const pdfUrl = form.querySelector('[name="pdfUrl"]').value.trim();
+    if (!title || !subject || !pdfUrl) return;
+    
+    try {
+        const newNRef = push(ref(db, 'notes'));
+        await set(newNRef, {
+            title, subject, pdfUrl, authorId: currentUser.uid,
+            authorName: getCurrentUserName(), authorRole: getEffectiveRole(), createdAt: serverTimestamp()
+        });
+        form.reset();
+        showToast("Note added.", "success");
+    } catch (e) { showToast("Error adding note.", "error"); }
+};
+
+window.deleteQuestion = async function(id) {
+    const q = appData.questions.find(i => i.id === id);
+    if (!q || (!((q.authorId === currentUser.uid) || (currentUserProfile?.role === "admin")))) return;
+    if (!confirm("Delete this question?")) return;
+    try {
+        await remove(ref(db, 'questions/' + id));
+        appData.answers.filter(a => a.questionId === id).forEach(async a => {
+            try { await remove(ref(db, 'answers/' + a.id)); } catch (e) {}
+        });
+        showToast("Question deleted.", "success");
+    } catch (e) { showToast("Error deleting question.", "error"); }
+};
+
+window.deleteAnswer = async function(id) {
+    const a = appData.answers.find(i => i.id === id);
+    if (!a || (!((a.authorId === currentUser.uid) || (currentUserProfile?.role === "admin")))) return;
+    if (!confirm("Delete this answer?")) return;
+    try {
+        await remove(ref(db, 'answers/' + id));
+        showToast("Answer deleted.", "success");
+    } catch (e) { showToast("Error deleting answer.", "error"); }
+};
+
+window.deleteNote = async function(id) {
+    const n = appData.notes.find(i => i.id === id);
+    if (!n || (!((n.authorId === currentUser.uid) || (currentUserProfile?.role === "admin")))) return;
+    if (!confirm("Delete this note?")) return;
+    try {
+        await remove(ref(db, 'notes/' + id));
+        showToast("Note deleted.", "success");
+    } catch (e) { showToast("Error deleting note.", "error"); }
+};
+
+window.openPdfViewer = function(url, title) {
+    if (!url) { showToast("Invalid PDF link.", "error"); return; }
+    DOM.pdfTitle.textContent = title;
+    DOM.pdfFrame.src = url;
+    DOM.pdfDownload.href = url;
+    DOM.pdfModal.classList.remove("hidden"); DOM.pdfModal.classList.add("flex");
+};
+window.closePdfViewer = function() {
+    DOM.pdfFrame.src = "";
+    DOM.pdfModal.classList.add("hidden"); DOM.pdfModal.classList.remove("flex");
+};
+
+/* RENDER VIEWS */
+function renderHome() {
+    const role = getEffectiveRole();
+    const canAsk = ["student", "faculty", "admin"].includes(role);
+    let html = `<div class="container fade-in">`;
+    
+    if (canAsk) {
+        html += `
+            <div class="card p-6">
+                <div class="flex-row gap-3 mb-4">
+                    <div class="card-header-icon"><i class="fas fa-question-circle"></i></div>
+                    <div>
+                        <h2>Ask the Community</h2>
+                        <p class="text-sm text-muted">Ask a question and get help from your campus.</p>
+                    </div>
+                </div>
+                <form onsubmit="submitQuestion(event)">
+                    <div class="form-group">
+                        <input name="title" required maxlength="150" placeholder="What do you want to ask?" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <textarea name="body" required maxlength="3000" rows="3" placeholder="Explain your question..." class="form-control"></textarea>
+                    </div>
+                    <div class="flex-row justify-end">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Post Question</button>
+                    </div>
+                </form>
+            </div>
+        `;
+    }
+
+    html += `
+        <div class="flex-row justify-between mb-4">
+            <div>
+                <h2>Community Questions</h2>
+                <p class="text-sm text-muted">Recent questions from CampusHub.</p>
+            </div>
+            <span class="badge">${appData.questions.length} ${appData.questions.length === 1 ? "Question" : "Questions"}</span>
+        </div>
+    `;
+
+    if (appData.questions.length === 0) {
+        html += `
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-comments"></i></div>
+                <h3>No questions yet</h3>
+                <p class="text-sm text-muted mt-2">Be the first person to ask a question.</p>
+            </div>
+        `;
+    }
+
+    for (const q of appData.questions) {
+        const answers = appData.answers.filter(a => a.questionId === q.id);
+        const isOwner = q.authorId === currentUser.uid;
+        const isAdmin = currentUserProfile?.role === "admin";
+        
+        html += `
+            <article class="card">
+                <div class="card-body">
+                    <div class="flex-row justify-between align-start">
+                        <div class="flex-row gap-3">
+                            ${generateAvatar(q.authorName, q.authorPhoto)}
+                            <div>
+                                <div class="user-name">${escapeHtml(q.authorName || "User")}</div>
+                                <div class="user-meta">${getRoleLabel(q.authorRole)} • ${formatDate(q.createdAt)}</div>
+                            </div>
+                        </div>
+                        ${isOwner || isAdmin ? `<button onclick="deleteQuestion('${q.id}')" class="btn-icon"><i class="fas fa-trash"></i></button>` : ""}
+                    </div>
+                    <div class="mt-4">
+                        <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">${escapeHtml(q.title)}</h3>
+                        <p style="color: #4b5563; white-space: pre-wrap; line-height: 1.6;">${escapeHtml(q.body)}</p>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="flex-row gap-2 mb-4" style="color: var(--text-main); font-weight: 700;">
+                        <i class="fas fa-reply" style="color: var(--primary);"></i> ${answers.length} ${answers.length === 1 ? "Answer" : "Answers"}
+                    </div>
+
+                    ${answers.length === 0 ? `<p class="text-sm text-muted mb-4">No answers yet. Be the first to answer.</p>` : `
+                        <div class="mb-4">
+                            ${answers.map(a => {
+                                const isAnsOwner = a.authorId === currentUser.uid;
+                                return `
+                                <div class="answer-box">
+                                    <div class="flex-row justify-between align-start mb-2">
+                                        <div class="flex-row gap-3">
+                                            ${generateAvatar(a.authorName, a.authorPhoto)}
+                                            <div>
+                                                <div class="user-name">${escapeHtml(a.authorName || "User")}</div>
+                                                <div class="user-meta">${getRoleLabel(a.authorRole)} • ${formatDate(a.createdAt)}</div>
+                                            </div>
+                                        </div>
+                                        ${isAnsOwner || isAdmin ? `<button onclick="deleteAnswer('${a.id}')" class="btn-icon" style="padding: 0.25rem;"><i class="fas fa-trash text-sm"></i></button>` : ""}
+                                    </div>
+                                    <p class="text-sm" style="color: #4b5563; white-space: pre-wrap;">${escapeHtml(a.body)}</p>
+                                </div>
+                            `}).join("")}
+                        </div>
+                    `}
+
+                    ${canAsk ? `
+                        <form onsubmit="submitAnswer(event, '${q.id}')" class="flex-row gap-2">
+                            <input name="answer" required maxlength="2000" placeholder="Write an answer..." class="form-control" style="flex: 1;">
+                            <button type="submit" class="btn-send"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    ` : ""}
+                </div>
+            </article>
+        `;
+    }
+    html += `</div>`;
+    return html;
+}
+
+function renderNotes() {
+    const role = getEffectiveRole();
+    const canAddNote = role === "faculty" || role === "admin";
+    let html = `<div class="container-lg fade-in">`;
+    
+    if (canAddNote) {
+        html += `
+            <div class="card p-6">
+                <div class="flex-row gap-3 mb-4">
+                    <div class="card-header-icon"><i class="fas fa-file-pdf"></i></div>
+                    <div>
+                        <h2>Add Study Note</h2>
+                        <p class="text-sm text-muted">Share a PDF with students.</p>
+                    </div>
+                </div>
+                <form onsubmit="addNote(event)" class="grid-2">
+                    <input name="title" required placeholder="Note title" class="form-control">
+                    <input name="subject" required placeholder="Subject" class="form-control">
+                    <input name="pdfUrl" required type="url" placeholder="PDF URL" class="form-control" style="grid-column: 1 / -1;">
+                    <button type="submit" class="btn btn-primary" style="grid-column: 1 / -1;"><i class="fas fa-plus"></i> Add Note</button>
+                </form>
+            </div>
+        `;
+    }
+
+    html += `
+        <div class="flex-row justify-between mb-4">
+            <div>
+                <h2>Study Notes</h2>
+                <p class="text-sm text-muted">Access notes shared on CampusHub.</p>
+            </div>
+            <span class="badge">${appData.notes.length} ${appData.notes.length === 1 ? "Note" : "Notes"}</span>
+        </div>
+    `;
+
+    if (appData.notes.length === 0) {
+        html += `
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-book-open"></i></div>
+                <h3>No notes available</h3>
+                <p class="text-sm text-muted mt-2">Study notes will appear here.</p>
+            </div>
+        `;
+    } else {
+        html += `<div class="grid-notes">`;
+        for (const n of appData.notes) {
+            const isOwner = n.authorId === currentUser.uid;
+            const isAdmin = currentUserProfile?.role === "admin";
+            html += `
+                <div class="card" style="margin-bottom: 0;">
+                    <div class="card-body">
+                        <div class="pdf-icon-lg"><i class="fas fa-file-pdf"></i></div>
+                        <div style="font-size: 0.75rem; color: var(--primary); font-weight: 800; text-transform: uppercase; margin-bottom: 0.25rem;">
+                            ${escapeHtml(n.subject || "Study Note")}
+                        </div>
+                        <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">${escapeHtml(n.title)}</h3>
+                        <p class="text-xs text-muted mb-4">Shared by ${escapeHtml(n.authorName || "User")} • ${formatDate(n.createdAt)}</p>
+                        <div class="flex-row gap-2">
+                            <button onclick="openPdfViewer('${escapeHtml(n.pdfUrl)}', '${escapeHtml(n.title)}')" class="btn btn-primary flex-1 btn-sm">
+                                <i class="fas fa-eye"></i> Open
+                            </button>
+                            ${isOwner || isAdmin ? `<button onclick="deleteNote('${n.id}')" class="btn btn-outline btn-sm px-3" style="color: var(--danger); border-color: #fca5a5;"><i class="fas fa-trash"></i></button>` : ""}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        html += `</div>`;
+    }
+    html += `</div>`;
+    return html;
+}
+
+function renderProfile() {
+    const name = getCurrentUserName();
+    const email = currentUser?.email || currentUserProfile?.email || "";
+    const role = currentUserProfile?.role || "student";
+    const photo = currentUserProfile?.photoURL || currentUser?.photoURL || "";
+    const qCount = appData.questions.filter(q => q.authorId === currentUser.uid).length;
+    const nCount = appData.notes.filter(n => n.authorId === currentUser.uid).length;
+
+    return `
+        <div class="container-sm fade-in">
+            <div class="card" style="overflow: hidden;">
+                <div class="profile-header-bg">
+                    <button onclick="editProfile()" class="btn btn-secondary btn-sm" style="position: absolute; right: 1rem; top: 1rem; background: rgba(255,255,255,0.2); color: white;">
+                        <i class="fas fa-pen"></i> Edit Profile
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="profile-img-wrap">
+                        ${photo ? `<img src="${escapeHtml(photo)}" class="profile-img" alt="Profile">` 
+                                : `<div class="profile-img-placeholder">${escapeHtml(name.charAt(0).toUpperCase())}</div>`}
+                    </div>
+                    <h1 style="font-size: 1.5rem;">${escapeHtml(name)}</h1>
+                    <p class="text-muted mt-1">${escapeHtml(email)}</p>
+                    <div class="badge mt-4" style="font-size: 0.875rem; padding: 0.5rem 1rem;"><i class="fas fa-user-shield"></i> ${getRoleLabel(role)}</div>
+                    
+                    <div class="grid-2 mt-5" style="border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                        <div class="stat-box">
+                            <div class="text-xs text-muted mb-1">Questions</div>
+                            <div style="font-size: 1.5rem; font-weight: 800;">${qCount}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="text-xs text-muted mb-1">Notes</div>
+                            <div style="font-size: 1.5rem; font-weight: 800;">${nCount}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderAdmin() {
+    if (currentUserProfile?.role !== "admin") {
+        return `
+            <div class="container-sm text-center" style="padding-top: 5rem;">
+                <div class="empty-icon" style="color: var(--danger); background: #fee2e2;"><i class="fas fa-lock"></i></div>
+                <h2>Access Denied</h2>
+                <p class="text-muted mt-2">You do not have permission to access the admin panel.</p>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="container-lg fade-in">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p class="text-muted mt-1">Manage and monitor CampusHub.</p>
+            </div>
+            <div class="grid-admin mt-5">
+                <div class="card p-5" style="margin-bottom:0;">
+                    <div class="text-sm text-muted">Questions</div>
+                    <div style="font-size: 1.875rem; font-weight: 800; margin-top: 0.5rem;">${appData.questions.length}</div>
+                </div>
+                <div class="card p-5" style="margin-bottom:0;">
+                    <div class="text-sm text-muted">Answers</div>
+                    <div style="font-size: 1.875rem; font-weight: 800; margin-top: 0.5rem;">${appData.answers.length}</div>
+                </div>
+                <div class="card p-5" style="margin-bottom:0;">
+                    <div class="text-sm text-muted">Notes</div>
+                    <div style="font-size: 1.875rem; font-weight: 800; margin-top: 0.5rem;">${appData.notes.length}</div>
+                </div>
+                <div class="card p-5" style="margin-bottom:0;">
+                    <div class="text-sm text-muted">Current Mode</div>
+                    <div style="font-size: 1.875rem; font-weight: 800; margin-top: 0.5rem; text-transform: capitalize;">${escapeHtml(adminActiveMode)}</div>
+                </div>
+            </div>
+            <div class="card p-6 mt-4">
+                <h2 class="mb-4">Quick Actions</h2>
+                <div class="flex-row gap-3" style="flex-wrap: wrap;">
+                    <button onclick="navigate('home')" class="btn btn-primary"><i class="fas fa-comments"></i> View Q&A</button>
+                    <button onclick="navigate('notes')" class="btn btn-outline"><i class="fas fa-book"></i> View Notes</button>
+                    <button onclick="setAdminActiveMode('student')" class="btn btn-secondary">Preview Student</button>
+                    <button onclick="setAdminActiveMode('faculty')" class="btn btn-secondary">Preview Faculty</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function render() {
+    if (!currentUser || !currentUserProfile) return;
+    
+    if (currentUserProfile.role === "admin") {
+        DOM.adminNavBtn.classList.remove("hidden");
+        DOM.modeToggleContainer.classList.remove("hidden"); DOM.modeToggleContainer.classList.add("flex");
+        DOM.previewBanner.classList.remove("hidden");
+        DOM.previewRoleText.textContent = getRoleLabel(adminActiveMode);
+        ["admin", "faculty", "student"].forEach(mode => {
+            const btn = document.getElementById(`role-btn-${mode}`);
+            if (btn) btn.className = (adminActiveMode === mode) ? "btn-role active" : "btn-role";
+        });
+    } else {
+        DOM.adminNavBtn.classList.add("hidden");
+        DOM.modeToggleContainer.classList.add("hidden"); DOM.modeToggleContainer.classList.remove("flex");
+        DOM.previewBanner.classList.add("hidden");
+    }
+
+    [DOM.navHomeBtn, DOM.navNotesBtn, DOM.navProfileBtn].forEach(b => b.classList.remove("active"));
+
+    if (currentPage === "home") { DOM.navHomeBtn.classList.add("active"); DOM.mainContent.innerHTML = renderHome(); } 
+    else if (currentPage === "notes") { DOM.navNotesBtn.classList.add("active"); DOM.mainContent.innerHTML = renderNotes(); } 
+    else if (currentPage === "profile") { DOM.navProfileBtn.classList.add("active"); DOM.mainContent.innerHTML = renderProfile(); } 
+    else if (currentPage === "admin") { DOM.mainContent.innerHTML = renderAdmin(); } 
+    else { currentPage = "home"; DOM.navHomeBtn.classList.add("active"); DOM.mainContent.innerHTML = renderHome(); }
+}
+
+/* EVENT LISTENERS */
+DOM.pdfModal.addEventListener("click", e => { if (e.target === DOM.pdfModal) closePdfViewer(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !DOM.pdfModal.classList.contains("hidden")) closePdfViewer(); });
+
+/* AUTH LISTENER */
+onAuthStateChanged(auth, async user => {
+    if (user) {
+        currentUser = user;
+        DOM.authScreen.classList.add("hidden"); DOM.authScreen.classList.remove("flex");
+        DOM.app.classList.remove("hidden"); DOM.app.classList.add("flex");
+        await checkProfileAndLoadData();
+    } else {
+        currentUser = null; currentUserProfile = null;
+        DOM.app.classList.remove("flex"); DOM.app.classList.add("hidden");
+        DOM.authScreen.classList.remove("hidden"); DOM.authScreen.classList.add("flex");
+        closeProfileModal();
+    }
+    showLoading(false);
+});
+
+/* STARTUP */
+showLoading(true, "Starting CampusHub...");
+</script>
+</body>
+</html>
