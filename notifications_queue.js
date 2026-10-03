@@ -1,7 +1,7 @@
 const http = require("http");
 const admin = require("firebase-admin");
 
-// Render Web Service ke liye port listener (port detect hote hi status "Live" ho jayega)
+// Render Health Check Server
 const PORT = process.env.PORT || 10000;
 http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
@@ -10,10 +10,8 @@ http.createServer((req, res) => {
   console.log(`Worker listening on port ${PORT}`);
 });
 
-// Render ke Environment Variable se JSON read karein
+// Firebase Admin Initialization
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-
-// ASN.1 parsing error theek karne ke liye newlines format karein
 serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
 
 admin.initializeApp({
@@ -24,37 +22,50 @@ admin.initializeApp({
 const db = admin.database();
 console.log("Notification background service is running...");
 
+// notifications_queue node listener
 db.ref("notifications_queue").on("child_added", async (snapshot) => {
   const notifData = snapshot.val();
   const notifId = snapshot.key;
   if (!notifData) return;
 
-  const payload = {
-    notification: {
-      title: notifData.title,
-      body: notifData.body,
-      icon: "icon.png"
-    }
-  };
+  console.log(`New notification detected in queue [${notifId}]:`, notifData.title);
 
   try {
     const usersSnap = await db.ref("users").once("value");
     const tokens = [];
+
     usersSnap.forEach((user) => {
-      if (user.val().fcmToken) {
-        tokens.push(user.val().fcmToken);
+      const data = user.val();
+      if (data && data.fcmToken) {
+        tokens.push(data.fcmToken);
       }
     });
 
+    console.log(`Found ${tokens.length} FCM token(s) to send.`);
+
     if (tokens.length > 0) {
-      await admin.messaging().sendMulticast({
+      const response = await admin.messaging().sendEachForMulticast({
         tokens: tokens,
-        notification: payload.notification
+        notification: {
+          title: notifData.title || "CampusHub Notification",
+          body: notifData.body || ""
+        }
       });
-      console.log("Push notifications sent successfully!");
+
+      console.log(`Successfully sent: ${response.successCount}, Failed: ${response.failureCount}`);
+      if (response.failureCount > 0) {
+        response.responses.forEach((resp, idx) => {
+          if (!resp.success) {
+            console.log(`Token ${idx} error:`, resp.error.message);
+          }
+        });
+      }
     }
+
+    // Process hone ke baad queue se entry hata dein
     await db.ref(`notifications_queue/${notifId}`).remove();
+    console.log(`Queue item [${notifId}] removed.`);
   } catch (error) {
-    console.log("Error sending push notification:", error);
+    console.error("Error processing notification queue:", error);
   }
 });
